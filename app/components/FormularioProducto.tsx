@@ -19,7 +19,6 @@ export default function FormularioProducto({ alFinalizar, setVista }: FormProps)
     e.preventDefault();
     setEnviando(true);
 
-    // 1. Obtenemos el usuario actual desde el nodo de Auth de Supabase
     const { data: { user } } = await supabase.auth.getUser();
 
     if (!user) {
@@ -29,7 +28,6 @@ export default function FormularioProducto({ alFinalizar, setVista }: FormProps)
     }
 
     try {
-      // 2. Enviamos todos los campos al Nodo de Lógica (Express)
       const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/productos`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -38,7 +36,7 @@ export default function FormularioProducto({ alFinalizar, setVista }: FormProps)
           descripcion,
           precio: parseFloat(precio),
           stock: parseInt(stock),
-          creado_por: user.id // UUID para la relación de llave foránea
+          creado_por: user.id 
         }),
       });
 

@@ -2,7 +2,7 @@
 import { useEffect, useState } from "react";
 import { useRouter, usePathname } from "next/navigation";
 import { Geist, Geist_Mono } from "next/font/google";
-import { supabase } from "@/lib/supabase"; // Tu archivo de configuración
+import { supabase } from "@/lib/supabase"; 
 import "./globals.css";
 
 const geistSans = Geist({
