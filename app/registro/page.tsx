@@ -17,7 +17,6 @@ export default function RegistroPage() {
     e.preventDefault();
     setCargando(true);
 
-    // Registramos en Supabase Auth pasando metadatos (data)
     const { error } = await supabase.auth.signUp({
       email,
       password,
