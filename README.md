@@ -1,36 +1,42 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# PS1Front
 
-## Getting Started
+Este repositorio contiene el proyecto **PS1Front**, desarrollado como parte de una tarea para la clase de **Sistemas Distribuidos**.
 
-First, run the development server:
+## Descripción
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+El objetivo de este proyecto es demostrar conceptos y prácticas propias de los sistemas distribuidos a través de una aplicación web. El frontend está implementado mayormente en **TypeScript**, con componentes escritos en **JavaScript** y **CSS** para el estilo Todo el apartado de el backend esta subido a otro Repositorio que llevara toda la logica que serian los endpoints que funcionan en conjunto con supabase(Base de datos postgresql)
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Tecnologías utilizadas
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+- **TypeScript** (97.7%)
+- **JavaScript** (1.2%)
+- **CSS** (1.1%)
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Características principales
 
-## Learn More
+- Arquitectura orientada a sistemas distribuidos.
+- Interfaz de usuario moderna y responsiva.
+- Código estructurado y comentado para facilitar su comprensión.
 
-To learn more about Next.js, take a look at the following resources:
+## Instrucciones de uso
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+1. Clona este repositorio:
+   ```bash
+   git clone https://github.com/jose230203/PS1Front.git
+   ```
+2. Instala las dependencias:
+   ```bash
+   npm install
+   ```
+3. Ejecuta la aplicación:
+   ```bash
+   npm start
+   ```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Autor
 
-## Deploy on Vercel
+- [José (jose230203)](https://github.com/jose230203)
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Nota
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Este proyecto fue realizado como **tarea académica** para la clase de **Sistemas Distribuidos**
