@@ -311,6 +311,7 @@ export default function Home() {
               producto={productoAEditar} 
               setVista={setVista} 
               alFinalizar={fetchProductos} 
+              userActual={userActual}
             />
           )}
 
