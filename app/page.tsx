@@ -29,6 +29,7 @@ export default function Home() {
   const [mensaje, setMensaje] = useState<string>('');
   const [productoAEditar, setProductoAEditar] = useState<any>(null);
   const [userActual, setUserActual] = useState<any>(null);
+  const [busqueda, setBusqueda] = useState<string>(''); 
 
   const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
@@ -84,9 +85,15 @@ export default function Home() {
     }
   };
 
-  const productosFiltrados = vista === 'mis-registros' 
-    ? productos.filter(p => p.creado_por === userActual?.id)
-    : productos;
+  // --- Lógica de Filtrado Combinada ---
+  const productosFiltrados = productos.filter(p => {
+    const coincideVista = vista === 'mis-registros' ? p.creado_por === userActual?.id : true;
+    const coincideBusqueda = 
+      p.nombre.toLowerCase().includes(busqueda.toLowerCase()) || 
+      (p.descripcion?.toLowerCase() || '').includes(busqueda.toLowerCase());
+    
+    return coincideVista && coincideBusqueda;
+  });
 
   return (
     <div className="flex flex-col min-h-screen bg-slate-50">
@@ -107,29 +114,46 @@ export default function Home() {
             </div>
           )}
 
-          {/* Selector de Contexto (Pestañas) */}
+          {/* Selector de Contexto y Barra de Búsqueda */}
           {(vista === 'buscar' || vista === 'mis-registros') && (
             <div className="flex flex-col gap-6">
-              <div className="flex items-center justify-between">
-                <div className="flex gap-2 p-1 bg-slate-200/50 rounded-2xl w-fit">
+              <div className="flex flex-col md:flex-row items-center justify-between gap-4">
+                <div className="flex gap-2 p-1 bg-slate-200/50 rounded-2xl w-full md:w-fit">
                   <button 
-                    onClick={() => setVista('buscar')}
-                    className={`flex items-center gap-2 px-6 py-2.5 rounded-xl text-sm font-black transition-all ${vista === 'buscar' ? 'bg-white text-blue-600 shadow-sm' : 'text-slate-500 hover:bg-slate-200'}`}
+                    onClick={() => { setVista('buscar'); setBusqueda(''); }}
+                    className={`flex-1 md:flex-none flex items-center justify-center gap-2 px-6 py-2.5 rounded-xl text-sm font-black transition-all ${vista === 'buscar' ? 'bg-white text-blue-600 shadow-sm' : 'text-slate-500 hover:bg-slate-200'}`}
                   >
-                    <Globe size={16} /> EXPLORADOR GLOBAL
+                    <Globe size={16} /> EXPLORADOR
                   </button>
                   <button 
-                    onClick={() => setVista('mis-registros')}
-                    className={`flex items-center gap-2 px-6 py-2.5 rounded-xl text-sm font-black transition-all ${vista === 'mis-registros' ? 'bg-white text-orange-600 shadow-sm' : 'text-slate-500 hover:bg-slate-200'}`}
+                    onClick={() => { setVista('mis-registros'); setBusqueda(''); }}
+                    className={`flex-1 md:flex-none flex items-center justify-center gap-2 px-6 py-2.5 rounded-xl text-sm font-black transition-all ${vista === 'mis-registros' ? 'bg-white text-orange-600 shadow-sm' : 'text-slate-500 hover:bg-slate-200'}`}
                   >
                     <PencilRuler size={16} /> MIS PUBLICACIONES
                   </button>
+                </div>
+
+                {/* BARRA DE BÚSQUEDA DINÁMICA */}
+                <div className="relative w-full md:max-w-md group">
+                  <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-blue-500 transition-colors" size={18} />
+                  <input 
+                    type="text"
+                    placeholder="Filtrar por nombre o descripción..."
+                    value={busqueda}
+                    onChange={(e) => setBusqueda(e.target.value)}
+                    className="w-full pl-11 pr-10 py-3 bg-white border-2 border-slate-200 rounded-2xl text-sm font-bold outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-50 transition-all shadow-sm"
+                  />
+                  {busqueda && (
+                    <button onClick={() => setBusqueda('')} className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600">
+                      <X size={16} />
+                    </button>
+                  )}
                 </div>
                 
                 <button 
                   onClick={fetchProductos}
                   disabled={cargando}
-                  className="p-2.5 bg-white border border-slate-200 rounded-xl hover:bg-slate-50 transition text-slate-600 shadow-sm"
+                  className="p-3 bg-white border-2 border-slate-200 rounded-2xl hover:bg-slate-50 transition text-slate-600 shadow-sm"
                   title="Sincronizar con el nodo"
                 >
                   <Database size={20} className={cargando ? "animate-spin" : ""} />
@@ -144,10 +168,13 @@ export default function Home() {
                   </div>
                   <div>
                     <h2 className="text-xl font-black text-slate-800 uppercase tracking-tight">
-                      {vista === 'buscar' ? 'Listado Completo' : 'Gestión de Productos'}
+                      {vista === 'buscar' ? 'Listado Global' : 'Mis Publicaciones'}
                     </h2>
                     <p className="text-xs text-slate-400 font-medium">
-                      Mostrando {productosFiltrados.length} recursos disponibles en el clúster
+                      {busqueda 
+                        ? `Filtrando: ${productosFiltrados.length} coincidencias encontradas` 
+                        : `Mostrando ${productosFiltrados.length} recursos en el clúster`
+                      }
                     </p>
                   </div>
                 </div>
@@ -155,7 +182,7 @@ export default function Home() {
                 {cargando ? (
                   <div className="p-32 flex flex-col items-center gap-4">
                     <Loader2 className="animate-spin text-blue-600" size={48} />
-                    <p className="text-slate-400 font-bold animate-pulse">SINCRONIZANDO NODOS...</p>
+                    <p className="text-slate-400 font-bold animate-pulse uppercase tracking-widest text-xs">Sincronizando Nodos...</p>
                   </div>
                 ) : (
                   <div className="overflow-x-auto">
@@ -165,7 +192,7 @@ export default function Home() {
                           <th className="p-6 border-b">Recurso / Versión</th>
                           <th className="p-6 border-b">Precio Mercado</th>
                           <th className="p-6 border-b">Stock</th>
-                          <th className="p-6 border-b text-center">Acciones de Nodo</th>
+                          <th className="p-6 border-b text-center">Acciones</th>
                         </tr>
                       </thead>
                       <tbody className="divide-y divide-slate-100">
@@ -224,7 +251,7 @@ export default function Home() {
                           <tr>
                             <td colSpan={4} className="p-20 text-center">
                               <Package className="mx-auto text-slate-200 mb-4" size={48} />
-                              <p className="text-slate-400 font-bold italic">No se encontraron registros en este segmento.</p>
+                              <p className="text-slate-400 font-bold italic">No hay resultados para esta búsqueda.</p>
                             </td>
                           </tr>
                         )}
@@ -236,7 +263,7 @@ export default function Home() {
             </div>
           )}
 
-          {/* Vistas Secundarias */}
+          {/* Vistas Secundarias (Detalle, Modificar, Agregar) se mantienen igual... */}
           {vista === 'detalle' && productoDetalle && (
             <div className="animate-in fade-in zoom-in duration-300">
               <div className="bg-white p-8 rounded-3xl shadow-2xl border border-slate-200 max-w-2xl mx-auto">
@@ -285,7 +312,6 @@ export default function Home() {
                     <div>
                       <p className="text-slate-400 text-[10px] font-black uppercase tracking-widest mb-2">Unidades en Red</p>
                       <p className="text-2xl font-black">{productoDetalle.stock} Unidades</p>
-
                     </div>
 
                     <div className="pt-4 border-t border-slate-800">

@@ -68,7 +68,7 @@ const Navbar: React.FC<NavbarProps> = ({ setVista }) => {
               >
                 <Globe size={18} className="text-blue-600 group-hover:scale-110 transition-transform" /> 
                 <div className="flex flex-col">
-                  <span className="text-sm font-bold">Explorador Global</span>
+                  <span className="text-sm font-bold">Busqueda Global</span>
                   <span className="text-[10px] text-slate-400">Ver todos los productos</span>
                 </div>
               </button>
